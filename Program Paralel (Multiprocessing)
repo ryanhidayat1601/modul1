@@ -1,0 +1,31 @@
+import multiprocessing
+import random
+import time
+
+def monte_carlo_chunk(n):
+    inside = 0
+    for _ in range(n):
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        if x**2 + y**2 <= 1:
+            inside += 1
+    return inside
+
+def calculate_pi_parallel(num_samples, num_processes):
+    chunk = num_samples // num_processes
+    
+    with multiprocessing.Pool(num_processes) as pool:
+        results = pool.map(monte_carlo_chunk, [chunk]*num_processes)
+    
+    total_inside = sum(results)
+    return 4 * total_inside / (chunk * num_processes)
+
+if __name__ == "__main__":
+    num_samples = 10_000_000
+    
+    for p in [1, 2, 4, 8, 16, 32]:
+        start = time.time()
+        pi_est = calculate_pi_parallel(num_samples, p)
+        end = time.time()
+        
+        print(f"Proses {p}: {end - start}")
