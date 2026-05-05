@@ -1,0 +1,24 @@
+import random
+import time
+import math
+
+def calculate_pi_serial(num_samples):
+    inside_circle = 0
+    
+    for _ in range(num_samples):
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        
+        if x**2 + y**2 <= 1:
+            inside_circle += 1
+    
+    return 4 * inside_circle / num_samples
+
+num_samples = 10_000_000
+
+start = time.time()
+pi_est = calculate_pi_serial(num_samples)
+end = time.time()
+
+print("Estimasi π:", pi_est)
+print("Waktu:", end - start)
